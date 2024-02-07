@@ -24,7 +24,7 @@ def calculate_fitness(chromosome):
     return chromosome.count('1')
 
 
-def parentSelection(population):
+def parent_selection(population):
     # tournament selection
     tournament = []
     # Choose 5 random chromosomes
@@ -48,19 +48,15 @@ def mutate(children, mutation_rate):
     mutated_kids = []
     for child in children:
         mutated_child = ""
-        mutated_child_char = ""
         for char in child:
             if random.random() < mutation_rate:
-                if char == 1:
-                    mutated_child_char = "0"
-                elif char == 0:
-                    mutated_child_char = "1"
-
+                if char == "1":
+                    mutated_child += "0"
+                elif char == "0":
+                    mutated_child += "1"
             else:
-                mutated_child_char = char
-            mutated_child += mutated_child_char
+                mutated_child += char
         mutated_kids.append(mutated_child)
-
     return mutated_kids
 
 
@@ -70,8 +66,8 @@ def evolve(population):
     new_population = []
     for x in range(0, 15):
         # Select parents
-        parent1 = parentSelection(population)
-        parent2 = parentSelection(population)
+        parent1 = parent_selection(population)
+        parent2 = parent_selection(population)
         # Create children
         if random.random() < crossover_rate:
             children = crossover(parent1, parent2)
