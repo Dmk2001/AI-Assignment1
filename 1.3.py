@@ -27,7 +27,6 @@ def calculate_fitness(chromosome):
     return fitness
 
 
-
 def parentSelection(population):
     tournament = []
 
@@ -50,27 +49,35 @@ def mutate(children, mutation_rate):
     mutated_kids = []
     for child in children:
         mutated_child = ""
+        mutated_child_char = ""
         for char in child:
             if random.random() < mutation_rate:
-                mutated_child_char = "1" if char == "0" else "0"
+                if char == 1:
+                    mutated_child_char = "0"
+                elif char == 0:
+                    mutated_child_char = "1"
 
             else:
                 mutated_child_char = char
             mutated_child += mutated_child_char
         mutated_kids.append(mutated_child)
-    # print(mutated_kids)
+
     return mutated_kids
 
 
 def evolve(population):
     mutation_rate = 0.01
+    crossover_rate = 0.8
     new_population = []
     for x in range(0, 15):
         parent1 = parentSelection(population)
         parent2 = parentSelection(population)
 
-        children = crossover(parent1, parent2)
-        new_population += (mutate(children, mutation_rate))
+        if random.random() < crossover_rate:
+            children = crossover(parent1, parent2)
+            new_population += (mutate(children, mutation_rate))
+        else:
+            new_population += (mutate((parent1, parent2), mutation_rate))
     return new_population
 
 
@@ -84,7 +91,7 @@ def genetic_algorithm(pop_size, str_length, generations):
     plt.plot(range(1, generations + 1), fitness_hist, marker='o')
     plt.xlabel('Generations')
     plt.ylabel('Average Fitness')
-    plt.title('Genetic Algorithm (Deceptive): Fitness Over Generations')
+    plt.title('Genetic Algorithm (Deceptive): Average Fitness Over Generations')
     plt.show()
 
 
