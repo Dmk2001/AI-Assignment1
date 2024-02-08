@@ -4,7 +4,7 @@ import Bin_packing_problems as bppScript
 from matplotlib import pyplot as plt
 
 
-def init_population(num_items, max_bin_weight, min_weight, population_size):
+def init_population(num_items, population_size):
     population = []
     for _ in range(population_size):
         chromosome = [random.randint(0, (num_items - 1)) for _ in range(num_items)]
@@ -29,11 +29,10 @@ def calculate_fitness(chromosome, item_sizes, max_bin_size):
         if bin_weight > max_bin_size:  # Check to see if bins exceed limit
             overloaded_bins = overloaded_bins + 1
         else:
-            total_fitness = 20
+            total_fitness = 40
     if overloaded_bins > 0:  # Apply penalty for invalid chromosomes
-        penalty = overloaded_bins * -40
-    if overloaded_bins == 0:
-        reward = reward + (100 - len(np.unique(chromosome))) * 5
+        penalty = overloaded_bins * -80
+    reward = reward + (100 - len(np.unique(chromosome))) * 5
     total_fitness += reward + penalty
 
     return total_fitness
@@ -58,7 +57,7 @@ def tournament_selection(population, tournament_size, item_sizes, max_bin_size):
 
 
 def crossover(parent1, parent2):
-    crossover_point = random.randint(0, len(parent1))  # Randomly select a crossover point
+    crossover_point = random.randint(1, len(parent1) - 1)  # Randomly select a crossover point
     child1 = parent1[:crossover_point] + parent2[crossover_point:]
     child2 = parent2[:crossover_point] + parent1[crossover_point:]
 
@@ -66,15 +65,19 @@ def crossover(parent1, parent2):
 
 
 def mutation(chromosome, mutation_rate):
-    mutated_chromosome = chromosome[:]  # Create a copy of the chromosome to avoid modifying the original
-    for i in range(len(mutated_chromosome)):
+    mutated_chromosome = chromosome[:]
+    min_value = min(chromosome)
+    max_value = max(chromosome)
+    for i in range(0, len(mutated_chromosome)):
         if random.random() < mutation_rate:
-            mutated_chromosome[i] = random.randint(0, (len(chromosome) - 1))  # Mutate the gene to a random value
+            # Mutate the gene at index i
+            mutated_chromosome[i] = random.randint(min_value, max_value)
+            
     return mutated_chromosome
 
 
 def evolve(population, item_sizes, max_bin_size):
-    mutation_rate = 0.02  # Rate of Mutation
+    mutation_rate = 0.01  # Rate of Mutation
     crossover_rate = 0.8  # Rate of crossover
     new_population = []
     for x in range(0, 50):
@@ -92,7 +95,7 @@ def evolve(population, item_sizes, max_bin_size):
 
 
 def genetic_algorithm(item_sizes, max_bin_size, generations, population_size):
-    population = init_population(len(item_sizes), max_bin_size, min(item_sizes), population_size)
+    population = init_population(len(item_sizes), population_size)
     fitness_hist = []
     bins_used_hist = []
 
@@ -109,14 +112,10 @@ def genetic_algorithm(item_sizes, max_bin_size, generations, population_size):
 
 if __name__ == "__main__":
     population_size = 100
-    generations = 100
+    generations = 500
     # Initialise problems
     bpp_problems = bppScript.bin_packing_problems()
     problem_info = []
-    # Iterate through problems, perform genetic algorithm
-    for x in range(0, len(bpp_problems) - 1):
-        problem_info.append(
-            genetic_algorithm(bpp_problems[x].sizes, bpp_problems[x].bin_size, generations, population_size))
     # Plotting fitness
     plt.figure(figsize=(20, 14))
     plt.subplot(2, 1, 1)
@@ -129,8 +128,8 @@ if __name__ == "__main__":
     plt.xlabel('Generations')
     plt.ylabel('Average Bins Used')
     plt.title('Genetic Algorithm: Average Bins Used Over Generations')
-
-    for i in range(0, 1):
+    # Iterate through problems, collect fitness and bins used
+    for i in range(0, len(bpp_problems)):
         info = genetic_algorithm(bpp_problems[i].sizes, bpp_problems[i].bin_size, generations, population_size)
         # Plotting fitness
         plt.subplot(2, 1, 1)
