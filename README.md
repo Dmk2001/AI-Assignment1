@@ -4,7 +4,7 @@ This generates an array of specified length (100) of binary strings of character
 ## Avg_fitness():
 Returns the average fitness of a population. (sum / len(population)
 ## Calculate_fitness():
-Determines the fitness of each function by counting the number of 1’s in a chromosome. For problem 1.2, fitness is calculated by the number of bits that math the target string. For 1.3, if the fitness is 0 (there no 1’s), then a value of 60 is returned.
+Determines the fitness of each function by counting the number of 1’s in a chromosome. For problem 1.2, fitness is calculated by the number of bits that math the target string. For 1.3, if the fitness is 0 (there no 1’s), then a value of 60 is returned. If it is all 1's it is also penalised.
 ## Parent_selection():
 Implements tournament selection by randomly choosing a subset of chromosomes, then it selects the chromosome with highest fitness.
 ## Crossover():
@@ -27,6 +27,7 @@ The algorithm is quick to find the optimal solution, taking roughly 20 generatio
 ![1 2](https://github.com/Dmk2001/AI-Assignment1/assets/74598528/13109b00-1ab6-4a0a-92ce-9faf42242796)
 
 This problem shows similar performance to the one above. However, when comparing both graphs, we see the one max problem reaches a higher average fitness at generation 20 as opposed to finding the target string. It shows the ability of the algorithm to find specific patterns.
+
 ## Deceptive Problem
 ![1 3](https://github.com/Dmk2001/AI-Assignment1/assets/74598528/1eabebad-00e8-4aeb-ab56-0d8e2f3f899a)
 
