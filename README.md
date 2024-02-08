@@ -58,5 +58,16 @@ The solution above, based on the graph does work in finding what could be close 
 
 Adjusting fitness to calculate how well bins are packed could also provide more optimal solutions too. Using a different form of mutation such as scrambling chromosomes, swapping indices or by starting with a high mutation rate which decreases over generations. Differences like this may help further. 
 
-In conclusion, the results obtained are a positive start. With minor code changes I feel it's possible to generate a solution that may provide better performance over fewer generations, reaching a solution that is close to if not the best solution to this problem. 
+In conclusion, the results obtained are a positive start. With minor code changes I feel it's possible to generate a solution that may provide better performance over fewer generations, reaching a solution that is close to if not the best solution to this problem.
+
+## References for research
+Genetic Algorithm for Bin Packing Problem - https://www.codeproject.com/Articles/633133/ga-bin-packing
+
+Application of Genetic Algorithm for the Bin Packing Problem with a New Representation Scheme - https://www.sid.ir/fileserver/je/1010720100302
+
+Python and the Bin Packing Problem - https://reintech.io/blog/python-bin-packing-problem-guide
+
+Exploring the Bin Packing Problem - https://medium.com/swlh/exploring-the-bin-packing-problem-f54a93ebdbe5
+
+Wikipedia (as suggested) - https://en.wikipedia.org/wiki/Bin_packing_problem
 
