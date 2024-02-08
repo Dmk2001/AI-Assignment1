@@ -1,7 +1,5 @@
 import random
-
 import numpy as np
-
 import Bin_packing_problems as bppScript
 from matplotlib import pyplot as plt
 
@@ -20,6 +18,7 @@ def calculate_fitness(chromosome, item_sizes, max_bin_size):
     bins = [[] for _ in range(num_bins)]  # Create empty bins
     overloaded_bins = 0
     penalty = 0
+    reward = 0
     for i, bin_index in enumerate(chromosome):
         bins[bin_index].append(item_sizes[i])  # Place the item in the corresponding bin
 
@@ -31,10 +30,10 @@ def calculate_fitness(chromosome, item_sizes, max_bin_size):
             overloaded_bins = overloaded_bins + 1
         else:
             total_fitness = 20
-    if overloaded_bins > 0:# Apply penalty for invalid chromosomes
+    if overloaded_bins > 0:  # Apply penalty for invalid chromosomes
         penalty = overloaded_bins * -40
-
-    reward = (100 - len(np.unique(chromosome))) * 5
+    if overloaded_bins == 0:
+        reward = reward + (100 - len(np.unique(chromosome))) * 5
     total_fitness += reward + penalty
 
     return total_fitness
@@ -52,21 +51,14 @@ def calculate_average_fitness(population, item_sizes, max_bin_size):  # Calculat
 def tournament_selection(population, tournament_size, item_sizes, max_bin_size):
     tournament = random.sample(population, tournament_size)  # Randomly select a subset (tournament) from the population
     tournament_fitness = []
+    for chromosome in tournament:
+        tournament_fitness.append(calculate_fitness(chromosome, item_sizes, max_bin_size))
 
-    # tournament_fitness = [calculate_fitness(chromosome, item_sizes, max_bin_size) for chromosome in tournament]
-    max_fitness = 0
-    for x in range(0, len(tournament)):
-        # (calculate_fitness(tournament[x], item_sizes, max_bin_size))
-        tournament_fitness.append(calculate_fitness(tournament[x], item_sizes, max_bin_size))
-        if calculate_fitness(tournament[x], item_sizes, max_bin_size) > max_fitness:
-            max_fitness = calculate_fitness(tournament[x], item_sizes, max_bin_size)
-            tournament_fitness.append(calculate_fitness(tournament[x], item_sizes, max_bin_size))
-            parent = tournament[x]
-    return parent
+    return tournament[tournament_fitness.index(max(tournament_fitness))]
 
 
 def crossover(parent1, parent2):
-    crossover_point = random.randint(1, len(parent1) - 1)  # Randomly select a crossover point
+    crossover_point = random.randint(0, len(parent1))  # Randomly select a crossover point
     child1 = parent1[:crossover_point] + parent2[crossover_point:]
     child2 = parent2[:crossover_point] + parent1[crossover_point:]
 
@@ -117,7 +109,7 @@ def genetic_algorithm(item_sizes, max_bin_size, generations, population_size):
 
 if __name__ == "__main__":
     population_size = 100
-    generations = 500
+    generations = 100
     # Initialise problems
     bpp_problems = bppScript.bin_packing_problems()
     problem_info = []
@@ -138,9 +130,8 @@ if __name__ == "__main__":
     plt.ylabel('Average Bins Used')
     plt.title('Genetic Algorithm: Average Bins Used Over Generations')
 
-    for i in range(len(bpp_problems)):
+    for i in range(0, 1):
         info = genetic_algorithm(bpp_problems[i].sizes, bpp_problems[i].bin_size, generations, population_size)
-        print(info["bins_used_hist"])
         # Plotting fitness
         plt.subplot(2, 1, 1)
         plt.plot(range(1, generations + 1), info['fitness_hist'], label=f'{bpp_problems[i].name}')
