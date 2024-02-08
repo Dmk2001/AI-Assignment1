@@ -84,7 +84,7 @@ def genetic_algorithm(pop_size, str_length, generations):
     for x in range(0, generations):
         population = evolve(population)
         fitness_hist.append(avg_fitness(population))
-    plt.plot(range(1, generations + 1), fitness_hist, marker='o')
+    plt.plot(range(1, generations + 1), fitness_hist)
     plt.xlabel('Generations')
     plt.ylabel('Average Fitness')
     plt.title('Genetic Algorithm: Average Fitness Over Generations')
@@ -94,6 +94,6 @@ def genetic_algorithm(pop_size, str_length, generations):
 if __name__ == "__main__":
     population_size = 100
     string_length = 30
-    generations = 30
+    generations = 100
 
     genetic_algorithm(population_size, string_length, generations)

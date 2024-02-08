@@ -24,6 +24,8 @@ def calculate_fitness(chromosome):
     fitness = chromosome.count('1')
     if fitness == 0:
         fitness = (2 * len(chromosome))
+    if fitness == len(chromosome):
+        fitness = 0
     return fitness
 
 
@@ -84,7 +86,7 @@ def genetic_algorithm(pop_size, str_length, generations):
         population = evolve(population)
         fitness_hist.append(avg_fitness(population))
 
-    plt.plot(range(1, generations + 1), fitness_hist, marker='o')
+    plt.plot(range(1, generations + 1), fitness_hist)
     plt.xlabel('Generations')
     plt.ylabel('Average Fitness')
     plt.title('Genetic Algorithm (Deceptive): Average Fitness Over Generations')
@@ -94,6 +96,6 @@ def genetic_algorithm(pop_size, str_length, generations):
 if __name__ == "__main__":
     population_size = 100
     string_length = 30
-    generations = 30
+    generations = 100
 
     genetic_algorithm(population_size, string_length, generations)
